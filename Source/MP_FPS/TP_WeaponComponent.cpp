@@ -42,6 +42,9 @@ void UTP_WeaponComponent::Fire()
 	
 			// Spawn the projectile at the muzzle
 			World->SpawnActor<AMP_FPSProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+
+			UE_LOG(LogTemp, Warning, TEXT("Firing on CLIENT."))
+			Server_OnFire(SpawnLocation, SpawnRotation);
 		}
 	}
 	
@@ -61,6 +64,18 @@ void UTP_WeaponComponent::Fire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+}
+
+
+//server send functions
+bool UTP_WeaponComponent::Server_OnFire_Validate(FVector Location, FRotator Rotation)
+{
+	return true;
+}
+
+void UTP_WeaponComponent::Server_OnFire_Implementation(FVector Location, FRotator Rotation)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Server_OnFire_Implementation HAS BEEN CALLED."))
 }
 
 void UTP_WeaponComponent::AttachWeapon(AMP_FPSCharacter* TargetCharacter)
@@ -97,6 +112,7 @@ void UTP_WeaponComponent::AttachWeapon(AMP_FPSCharacter* TargetCharacter)
 	}
 }
 
+
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (Character == nullptr)
@@ -112,3 +128,4 @@ void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		}
 	}
 }
+

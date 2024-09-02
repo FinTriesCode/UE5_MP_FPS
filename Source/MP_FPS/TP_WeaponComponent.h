@@ -49,6 +49,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
 
+	//server send functions
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_OnFire(FVector Location, FRotator Rotation);
+	bool Server_OnFire_Validate(FVector Location, FRotator Rotation);
+	void Server_OnFire_Implementation(FVector Location, FRotator Rotation);
+
 protected:
 	/** Ends gameplay for this component. */
 	UFUNCTION()

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "TP_WeaponComponent.generated.h"
 
 class AMP_FPSCharacter;
@@ -49,11 +50,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
 
-	//server send functions
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_OnFire(FVector Location, FRotator Rotation);
-	bool Server_OnFire_Validate(FVector Location, FRotator Rotation);
-	void Server_OnFire_Implementation(FVector Location, FRotator Rotation);
+
+	//server functions
+	UFUNCTION(Server, Reliable)
+	void Server_OnFire();
+
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	/** Ends gameplay for this component. */
@@ -62,5 +65,6 @@ protected:
 
 private:
 	/** The Character holding this weapon*/
+	UPROPERTY(Replicated)
 	AMP_FPSCharacter* Character;
 };

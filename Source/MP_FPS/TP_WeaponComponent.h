@@ -50,10 +50,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void PlayFireSound();
 
-	//server functions
+
+	//server functions and variables
 	UFUNCTION(Server, Reliable)
+		//Implement and verificaty fuctions are automatically defined.
 	void Server_OnFire();
+
+	UFUNCTION(Server, Unreliable)
+		//Implement and verificaty fuctions are automatically defined.
+	void Server_OnFireSound();
 
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

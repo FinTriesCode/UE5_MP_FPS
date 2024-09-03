@@ -24,9 +24,21 @@ void UTP_WeaponComponent::Fire()
 	//call server function for fire - allowing players to see the firing of the weapon
 	Server_OnFire();
 
-	//withou this, the client has no audio
+	//if client
+	if (!GetOwner()->HasAuthority())
+	{
+		//play sound
+		PlayFireSound();
+	}
+
+
+}
+
+void UTP_WeaponComponent::PlayFireSound()
+{
 	if (FireSound != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Server_OnFireSound_Implementation HAS BEEN CALLED."));
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation());
 	}
 }
@@ -72,8 +84,21 @@ void UTP_WeaponComponent::Server_OnFire_Implementation()
 				AnimInstance->Montage_Play(FireAnimation, 1.f);
 			}
 		}
+
+		//gun audio
+		Server_OnFireSound();
 	}
 }
+
+void UTP_WeaponComponent::Server_OnFireSound_Implementation()
+{
+	if (FireSound != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Server_OnFireSound_Implementation HAS BEEN CALLED."));
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation());
+	}
+}
+
 
 //funciton to allow for replicating variables
 void UTP_WeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
